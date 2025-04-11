@@ -30,7 +30,8 @@ def add_product_handler(product_service: ProductService):
 
 
 def list_products_handler(product_service: ProductService):
-    products = product_service.list_products()
+    seller_id = request.user['id']
+    products = product_service.list_products_by_seller(seller_id)
     return jsonify([{
         "name": product.name,
         "description": product.description,

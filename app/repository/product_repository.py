@@ -16,3 +16,6 @@ class ProductRepository:
         if product:
             self.db_session.delete(product)
             self.db_session.commit()
+            
+    def get_products_by_seller(self, seller_id):
+        return self.db_session.query(Product).filter_by(seller_id=seller_id).all()

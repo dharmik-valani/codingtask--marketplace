@@ -26,8 +26,10 @@ class ProductService:
         return product 
 
     def list_products(self):
-        # return self.product_repository.get_all_products(limit=20)
         return self.product_repository.get_all_products()
+    
+    def list_products_by_seller(self, seller_id):
+        return self.product_repository.get_products_by_seller(seller_id)
 
     def delete_product(self, product_id):
         if product_id is None:

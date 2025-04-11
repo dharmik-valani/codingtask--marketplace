@@ -44,7 +44,7 @@ def login_user_handler(user_service: UserService):
     try:
         user = user_service.login_user(username, password)
 
-        token = generate_jwt_token({'username': user.username})
+        token = generate_jwt_token({'id': user.id})
 
         return jsonify({
             "message": "Login successful",
