@@ -10,6 +10,7 @@ class UserService:
             raise ValueError("Username already exists")
         user = User(username, email, password)
         self.user_repository.create_user(user)
+        return user
 
     def login_user(self, username, password):
         user = self.user_repository.get_user_by_username(username)

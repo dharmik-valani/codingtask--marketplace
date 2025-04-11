@@ -5,15 +5,15 @@ class ProductService:
     def __init__(self, product_repository: ProductRepository):
         self.product_repository = product_repository
 
-    def add_product(self, title, description, price, seller_id):
-        product = Product(title, description, price, seller_id)
+    def add_product(self, name, description, price, seller_id):
+        product = Product(name, description, price, seller_id)
 
-        if title is None or title.strip() == "":
-            raise ValueError("Product title cannot be empty.")
+        if name is None or name.strip() == "":
+            raise ValueError("Product name cannot be empty.")
         
         blacklist = ["banned", "illegal", "restricted"]
-        if any(banned_word in title.lower() for banned_word in blacklist):
-            raise ValueError("Product title contains restricted words.")
+        if any(banned_word in name.lower() for banned_word in blacklist):
+            raise ValueError("Product name contains restricted words.")
 
         if price is None or price < 0:
             raise ValueError("Product price must be a positive value.")
@@ -22,6 +22,8 @@ class ProductService:
             raise ValueError("Product description cannot exceed 255 characters.")
 
         self.product_repository.add_product(product)
+
+        return product 
 
     def list_products(self):
         # return self.product_repository.get_all_products(limit=20)

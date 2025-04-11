@@ -22,8 +22,11 @@ def register_user_handler(user_service: UserService):
         return jsonify({'error': 'Password too short'}), 400
 
     try:
-        user_service.register_user(username, email, password)
-        return jsonify({"message": "User registered successfully"}), 201
+        user = user_service.register_user(username, email, password)
+        return jsonify({"message": "User registered successfully", "user": {
+            "id": user.id,
+            "email": user.email,
+        } }), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 

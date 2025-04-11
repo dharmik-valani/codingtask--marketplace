@@ -3,21 +3,36 @@ from app.services.product_service import ProductService
 
 def add_product_handler(product_service: ProductService):
     data = request.get_json()
-    if not data or 'title' not in data or 'description' not in data or 'price' not in data or 'seller_id' not in data:
+    if not data or 'name' not in data or 'description' not in data or 'price' not in data or 'seller_id' not in data:
         return jsonify({"error": "Invalid request"}), 400
-    
+
     try:
-        product_service.add_product(data['title'], data['description'], data['price'], data['seller_id'])
+        product = product_service.add_product(
+            data['name'],
+            data['description'],
+            data['price'],
+            data['seller_id']
+        )
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    
-    return jsonify({"message": "Product added successfully"}), 201
+
+    return jsonify({
+        "message": "Product added successfully",
+        "product": {
+            "id": product.id,
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "seller_id": product.seller_id
+        }
+    }), 201
+
 
 
 def list_products_handler(product_service: ProductService):
     products = product_service.list_products()
     return jsonify([{
-        "title": product.title,
+        "name": product.name,
         "description": product.description,
         "price": product.price,
         "seller_id": product.seller_id
