@@ -1,5 +1,4 @@
 from main import db
-from sqlalchemy.orm import declarative_base
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -10,8 +9,8 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     seller_id = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, title, description, price, seller_id):
-        self.title = title
+    def __init__(self, name, description, price, seller_id):
+        self.name = name
         self.description = description
         self.price = price
         self.seller_id = seller_id

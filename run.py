@@ -5,6 +5,7 @@ from app.repository.user_repository import UserRepository
 from app.repository.product_repository import ProductRepository
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
+from app.utils.jwt_utils import jwt_required  # 👈 import here
 
 db_session = db.session
 
@@ -24,10 +25,12 @@ def login_user():
     return login_user_handler(user_service)
 
 @app.route('/products', methods=['POST'])
+@jwt_required 
 def add_product():
     return add_product_handler(product_service)
 
 @app.route('/products', methods=['GET'])
+@jwt_required  
 def list_products():
     return list_products_handler(product_service)
 

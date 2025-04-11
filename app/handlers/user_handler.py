@@ -1,35 +1,52 @@
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from app.services.user_service import UserService
+from app.utils.jwt_utils import generate_jwt_token
 
 def register_user_handler(user_service: UserService):
+
     data = request.get_json()
-    if not data or 'username' not in data:
+    if not data:
         return jsonify({"error": "Invalid request"}), 400
 
-    if 'username' not in data or len(data['username']) < 3:
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not username or len(username) < 3:
         return jsonify({'error': 'Invalid username'}), 400
 
-    if 'email' not in data or '@' not in data['email']:
+    if not email or '@' not in email:
         return jsonify({'error': 'Invalid email'}), 400
 
-    if 'password' not in data or len(data['password']) < 6:
+    if not password or len(password) < 6:
         return jsonify({'error': 'Password too short'}), 400
-    
+
     try:
-        user_service.register_user(data['username'], data['email'], data['password'])
+        user_service.register_user(username, email, password)
+        return jsonify({"message": "User registered successfully"}), 201
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    
-    return jsonify({"message": "User registered successfully"}), 201
 
 def login_user_handler(user_service: UserService):
     data = request.get_json()
-    if not data or 'username' not in data or 'password' not in data:
+    if not data:
         return jsonify({"error": "Invalid request"}), 400
-    
+
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"error": "Username and password required"}), 400
+
     try:
-        user = user_service.login_user(data['username'], data['password'])
+        user = user_service.login_user(username, password)
+
+        token = generate_jwt_token({'username': user.username})
+
+        return jsonify({
+            "message": "Login successful",
+            "token": token
+        }), 200
+
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
-    
-    return jsonify({"message": "Login successful", "username": user.username}), 200
