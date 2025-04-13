@@ -1,3 +1,6 @@
+# Assignment 1 Documentation and Planning
+https://butter-windscreen-f18.notion.site/Part-Safari-1d2203bed1078045bdc3dc9c4fa405f1 
+
 # Coding Test Marketplace
 
 This is dummy simple marketplace
